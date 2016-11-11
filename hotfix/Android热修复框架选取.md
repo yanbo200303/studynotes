@@ -6,7 +6,7 @@ native 动态替换方法 java 层的代码，通过 native 层hook java 层的�
 ### AndFix
 AndFix采用native hook的方式，直接使用 dalvik_replaceMethod 替换 class 中方法的实现。<p>
 其简要原理如下图所示：
-![](andfix.png)
+![](andfix.jpg)
 
 <p>因为是在底层进行hook，所以需要针对dalvik虚拟机和art虚拟机做适配，需要考虑指令集的兼容问题，需要native代码支持，兼容性上会有一定的影响。另外，由于从实现上直接跳过了类初始化，设置为初始化完毕，所以像是静态函数、静态成员、构造函数都会出现问题，复杂点的类Class.forname可能会有问题。
 
