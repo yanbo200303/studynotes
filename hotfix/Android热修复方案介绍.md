@@ -6,6 +6,7 @@ native 动态替换方法 java 层的代码，通过 native 层hook java 层的�
 ### AndFix
 AndFix采用native hook的方式，直接使用 dalvik_replaceMethod 替换 class 中方法的实现。<p>
 其简要原理如下图所示：
+
 ![](andfix.jpg)
 
 <p>因为是在底层进行hook，所以需要针对dalvik虚拟机和art虚拟机做适配，需要考虑指令集的兼容问题，需要native代码支持，兼容性上会有一定的影响。另外，由于从实现上直接跳过了类初始化，设置为初始化完毕，所以像是静态函数、静态成员、构造函数都会出现问题，复杂点的类Class.forname可能会有问题。
@@ -14,6 +15,7 @@ AndFix采用native hook的方式，直接使用 dalvik_replaceMethod 替换 clas
 * 不需要重启
 * 轻量 
 * 方法级粒度
+
 #### 缺点：
 * 方法级别的修复，不能完成资源文件的修改替换
 * 由于是调用了JNI层的方法，那么某些ROM可能会有兼容性、稳定性问题。
@@ -24,11 +26,13 @@ AndFix采用native hook的方式，直接使用 dalvik_replaceMethod 替换 clas
 Robust是美团在
 <p>Robust插件对每个产品代码的每个函数都在编译打包阶段自动的插入了一段代码，插入过程对业务开发是完全透明。
 Robust为每个class增加了个类型为ChangeQuickRedirect的静态成员，而在每个方法前都插入了使用changeQuickRedirect相关的逻辑，当changeQuickRedirect不为null时，可能会执行到accessDispatch从而替换掉之前老的逻辑，达到fix的目的。
+
 ![](robust.png)
 
 #### 优点：
 * 兼容性高
 * 实时性好
+
 #### 缺点：
 * 侵入产品代码
 * 运行效率略差
@@ -43,6 +47,7 @@ Tinker是微信官方的Android热补丁解决方案，它支持动态下发代�
 Tinker 的方案来源 gradle 编译的 instant run 与 buck 编译的 exopackage，核心思想都是全量替换新的 Dex。简言之，就是在编译时通过新旧两个Dex生成差异patch.dex，在运行时，将差异patch.dex重新跟原始安装包的旧Dex还原为新的Dex。
 <p>同时Tinker自研了DexDiff算法，可以充分利用原本Dex的信息，减少patch的大小。Tinker的DexDiff粒度是Dex格式的每一项，而BsDiff的粒度是文件，AndFix/Qzone的粒度为class。 
 Tinker的diff示意图
+
 ![](tinker_diff.jpg)
 
 #### 优点：
@@ -50,6 +55,7 @@ Tinker的diff示意图
 * 兼容性高
 * 非侵入
 * 补丁包小
+
 #### 缺点：
 * 不能实时生效
 * 集成复杂度略高
