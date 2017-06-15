@@ -1,4 +1,4 @@
-# Kotlin学习笔记-初探
+# Kotlin学习笔记-环境搭建
 在2017年5月的Google IO大会上，Google宣布Kotlin成为Android的官方语言，随后的2017年6月的TIOBE排行榜中，Kotlin就首次挤进了编程语言TOP50，可见Kotlin的爆发之迅速。作为一个Android开发者需要立刻学习这门新的语言，本文是Kotlin学习笔记的第一篇。
 
 ## Kotlin简介
